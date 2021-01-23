@@ -24,7 +24,7 @@ console.log(process.env.MONGODB_URI, " ", process.env.NODE_ENV);
 /*mongoose.connect(
   process.env.MONGODB_URI, // obtiene la url de conexión desde las variables de entorno
   { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
-);*/
+);add variables on heroku*/
 
 //mongoose.set("debug", true);
 
