@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 const Pet = mongoose.model('Pet')
 
 function createPet(req, res, next) {
-  var pet = new Pet(req.body)
-  pet.posted_by = req.usuario.id
-  pet.estado = 'disponible'
+  const body = req.body
+  const pet = new Pet(body)
   pet.save().then(pet => {
     res.status(201).send(pet)
   }).catch(next)
@@ -106,8 +105,8 @@ function deletePet(req, res) {
 
 module.exports = {
   createPet,
-  getPets,
+  /*getPets,
   modifyPet,
   deletePet,
-  getPet
+  getPet*/
 }
