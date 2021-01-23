@@ -10,7 +10,7 @@ passport.use(new LocalStrategy({                            //Configurando eleme
     passwordField: 'password'
 }, function (email, password, done) {
     UserAdmin.findOne({ email: email }).then(function (userAdmin) {
-    if (!userAdmin || !userAdmin.validarPassword(password)) {
+    if (!userAdmin || !userAdmin.validatePassword(password)) {
         return done(null, false, { errors: { 'email o contraseña': 'equivocado(a)' } });
     }
         return done(null, userAdmin);
@@ -22,7 +22,7 @@ passport.use(new LocalStrategy({                            //Configurando eleme
     passwordField: 'password'
 }, function (email, password, done) {
     UserRescuer.findOne({ email: email }).then(function (userRescuer) {
-    if (!userRescuer || !userRescuer.validarPassword(password)) {
+    if (!userRescuer || !userRescuer.validatePassword(password)) {
         return done(null, false, { errors: { 'email o contraseña': 'equivocado(a)' } });
     }
         return done(null, userRescuer);
@@ -34,13 +34,9 @@ passport.use(new LocalStrategy({                            //Configurando eleme
     passwordField: 'password'
 }, function (email, password, done) {
     UserAdoptant.findOne({ email: email }).then(function (userAdoptant) {
-    if (!userAdoptant || !userAdoptant.validarPassword(password)) {
+    if (!userAdoptant || !userAdoptant.validatePassword(password)) {
         return done(null, false, { errors: { 'email o contraseña': 'equivocado(a)' } });
     }
         return done(null, userAdoptant);
     }).catch(done);
 }));
-
-
-
-//modificar para cada usuario

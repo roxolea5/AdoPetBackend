@@ -1,5 +1,12 @@
 // Request.js
 
+// UserAdmin.js
+const mongoose = require('mongoose');                         //Importando mongoose.
+const uniqueValidator = require("mongoose-unique-validator"); //Importando módulo mongoose-unique-validator, pendiente de instalar.
+const crypto = require('crypto');                             //Importando módulo crypto, pendiente de instalar.
+const jwt = require('jsonwebtoken');                          //Importando módulo jsonwebtoken, pendiente de instalar.
+const secret = require('../config').secret;  
+
 const RequestSchema = new mongoose.Schema({
     required_pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}, 
     required_by: { type: mongoose.Schema.Types.ObjectId, ref: 'UserAdoptant'}, 

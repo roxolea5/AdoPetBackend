@@ -49,7 +49,7 @@ const UserAdoptantSchema = new mongoose.Schema({                   //Definiendo 
 // usando plugin de validación para que no se repitan correos ni usernames
 UserAdoptantSchema.plugin(uniqueValidator, { message: "Ya existe" });
 
-UserAdoptantSchema.methods.crearPassword = function (password) {
+UserAdoptantSchema.methods.createPassword = function (password) {
 this.salt = crypto.randomBytes(16).toString("hex"); // generando una "sal" random para cada usuario
 this.hash = crypto
  .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
@@ -59,14 +59,14 @@ this.hash = crypto
 /**
 * Recibe el password, genera y compara el has con el de la base de datos
 */
-UserAdoptantSchema.methods.validarPassword = function (password) {
+UserAdoptantSchema.methods.validatePassword = function (password) {
 const hash = crypto
  .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
  .toString("hex");
 return this.hash === hash;
 };
 
-UserAdoptantSchema.methods.generarJWT = function() {
+UserAdoptantSchema.methods.generateJWT = function() {
 const today = new Date();
 const exp = new Date(today);
 exp.setDate(today.getDate() + 60); // 60 días antes de expirar
@@ -85,7 +85,7 @@ UserAdoptantSchema.methods.toAuthJSON = function(){
 return {
  username: this.username,
  email: this.email,
- token: this.generarJWT()
+ token: this.generateJWT()
 };
 };
 
@@ -99,6 +99,7 @@ UserAdoptantSchema.methods.publicData = function(){
         first_name: this.first_name,
         last_name: this.last_name,
         email: this.email,
+        password: this.password,
         date_of_birth: this.date_of_birth,
         phone: this.phone,
         status: this.status,  

@@ -8,14 +8,14 @@ function createUserAdoptant(req, res, next) {
     password = body.password
 
   delete body.password
-  const usuario = new UserAdoptant(body)
-  usuario.crearPassword(password)
-  usuario.save().then(user => {                                         //Guardando nuevo usuario en MongoDB.
+  const userAdoptant = new UserAdoptant(body)
+  userAdoptant.createPassword(password)
+  userAdoptant.save().then(user => {                                         //Guardando nuevo usuario en MongoDB.
     return res.status(201).json(user.toAuthJSON())
   }).catch(next)
 }
 
-function getUserAdoptant(req, res, next) {                              //Obteniendo usuario desde MongoDB.
+function getUserAdoptants(req, res, next) {                              //Obteniendo usuario desde MongoDB.
   if(req.params.id){
     UserAdoptant.findById(req.params.id, (err, user) => {
       if (!user || err) {
@@ -35,21 +35,23 @@ function modifyUserAdoptant(req, res, next) {
   console.log(req.usuario)
   UserAdoptant.findById(req.usuario.id).then(user => {
     if (!user) { return res.sendStatus(401); }
-    let nuevaInfo = req.body
-    if (typeof nuevaInfo.username !== 'undefined')
-      user.username = nuevaInfo.username
-    if (typeof nuevaInfo.first_name !== 'undefined')
-      user.first_name = nuevaInfo.first_name
-    if (typeof nuevaInfo.last_name !== 'undefined')
-      user.last_name = nuevaInfo.last_name
-    if (typeof nuevaInfo.email !== 'undefined')
-      user.email = nuevaInfo.email
-    if (typeof nuevaInfo.phone !== 'undefined')
-      user.phone = nuevaInfo.phone
-    if (typeof nuevaInfo.status !== 'undefined')
-      user.status = nuevaInfo.status
-    if (typeof nuevaInfo.password !== 'undefined')
-      user.crearPassword(nuevaInfo.password)
+    let newInfo = req.body
+    if (typeof newInfo.username !== 'undefined')
+      user.username = newInfo.username
+    if (typeof newInfo.first_name !== 'undefined')
+      user.first_name = newInfo.first_name
+    if (typeof newInfo.last_name !== 'undefined')
+      user.last_name = newInfo.last_name
+    if (typeof newInfo.email !== 'undefined')
+      user.email = newInfo.email
+    if (typeof newInfo.password !== 'undefined')
+      user.createPassword(newInfo.password)
+    if (typeof newInfo.date_of_birth !== 'undefined')
+      user.date_of_birth = newInfo.date_of_birth
+    if (typeof newInfo.phone !== 'undefined')
+      user.phone = newInfo.phone
+    if (typeof newInfo.status !== 'undefined')
+      user.status = newInfo.status    
     user.save().then(updatedUser => {                                   //Guardando usuario modificado en MongoDB.
       res.status(201).json(updatedUser.publicData())
     }).catch(next)
@@ -63,7 +65,7 @@ function deleteUserAdoptant(req, res) {
   })
 }
 
-function iniciarSesion(req, res, next) {
+function startSession(req, res, next) {
   if (!req.body.email) {
     return res.status(422).json({ errors: { email: "no puede estar vacío" } });
   }
@@ -76,7 +78,7 @@ function iniciarSesion(req, res, next) {
     if (err) { return next(err); }
 
     if (user) {
-      user.token = user.generarJWT();
+      user.token = user.generateJWT();
       return res.json({ user: user.toAuthJSON() });
     } else {
       return res.status(422).json(info);
@@ -85,9 +87,9 @@ function iniciarSesion(req, res, next) {
 }
 
 module.exports = {
-    createUserAdoptant,
-    getUserAdoptant,
-    modifyUserAdoptant,
-    deleteUserAdoptant,
-  iniciarSesion
+  createUserAdoptant,
+  getUserAdoptants,
+  modifyUserAdoptant,
+  deleteUserAdoptant,
+  startSession
 }

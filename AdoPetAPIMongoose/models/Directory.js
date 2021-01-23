@@ -1,4 +1,10 @@
 // Directory.js
+// UserAdmin.js
+const mongoose = require('mongoose');                         //Importando mongoose.
+const uniqueValidator = require("mongoose-unique-validator"); //Importando módulo mongoose-unique-validator, pendiente de instalar.
+const crypto = require('crypto');                             //Importando módulo crypto, pendiente de instalar.
+const jwt = require('jsonwebtoken');                          //Importando módulo jsonwebtoken, pendiente de instalar.
+const secret = require('../config').secret;  
 
 
 const DirectorySchema = new mongoose.Schema({
@@ -29,4 +35,4 @@ DirectorySchema.methods.publicData = function(){
   };
 };
 
-mongoose.model('Event', EventSchema);
+mongoose.model('Directory', DirectorySchema);

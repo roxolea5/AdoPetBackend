@@ -7,11 +7,11 @@ router.get('/', (req, res)=>{
 router.use('/userAdmins', require('./userAdmins'));
 router.use('/userRescuers', require('./userRescuers'));
 router.use('/userAdoptants', require('./userAdoptants'));
-router.use('/questionaries', require('./questionaries'));
+/*router.use('/questionaries', require('./questionaries'));
 router.use('/pets', require('./pets'));
 router.use('/requests', require('./requests'));
 router.use('/events', require('./events'));
-router.use('/directories', require('./directories'));
+router.use('/directories', require('./directories'));*/
 
 
 module.exports = router;

@@ -8,14 +8,14 @@ function createUserRescuer(req, res, next) {
     password = body.password
 
   delete body.password
-  const usuario = new UserRescuer(body)
-  usuario.crearPassword(password)
-  usuario.save().then(user => {                                         //Guardando nuevo usuario en MongoDB.
+  const userRescuer = new UserRescuer(body)
+  userRescuer.createPassword(password)
+  userRescuer.save().then(user => {                                         //Guardando nuevo usuario en MongoDB.
     return res.status(201).json(user.toAuthJSON())
   }).catch(next)
 }
 
-function getUserRescuer(req, res, next) {                              //Obteniendo usuario desde MongoDB.
+function getUserRescuers(req, res, next) {                              //Obteniendo usuario desde MongoDB.
   if(req.params.id){
     UserRescuer.findById(req.params.id, (err, user) => {
       if (!user || err) {
@@ -44,12 +44,20 @@ function modifyUserRescuer(req, res, next) {
       user.last_name = nuevaInfo.last_name
     if (typeof nuevaInfo.email !== 'undefined')
       user.email = nuevaInfo.email
+    if (typeof nuevaInfo.password !== 'undefined')
+      user.createPassword(nuevaInfo.password)
+    if (typeof nuevaInfo.date_of_birth !== 'undefined')
+      user.date_of_birth = nuevaInfo.date_of_birth
     if (typeof nuevaInfo.phone !== 'undefined')
       user.phone = nuevaInfo.phone
+    if (typeof nuevaInfo.photo !== 'undefined')
+      user.photo = nuevaInfo.photo
+    if (typeof nuevaInfo.address !== 'undefined')
+      user.address = nuevaInfo.address
+    if (typeof nuevaInfo.interview_date !== 'undefined')
+      user.interview_date = nuevaInfo.interview_date
     if (typeof nuevaInfo.status !== 'undefined')
-      user.status = nuevaInfo.status
-    if (typeof nuevaInfo.password !== 'undefined')
-      user.crearPassword(nuevaInfo.password)
+      user.status = nuevaInfo.status   
     user.save().then(updatedUser => {                                   //Guardando usuario modificado en MongoDB.
       res.status(201).json(updatedUser.publicData())
     }).catch(next)
@@ -63,7 +71,7 @@ function deleteUserRescuer(req, res) {
   })
 }
 
-function iniciarSesion(req, res, next) {
+function startSession(req, res, next) {
   if (!req.body.email) {
     return res.status(422).json({ errors: { email: "no puede estar vacío" } });
   }
@@ -76,7 +84,7 @@ function iniciarSesion(req, res, next) {
     if (err) { return next(err); }
 
     if (user) {
-      user.token = user.generarJWT();
+      user.token = user.generateJWT();
       return res.json({ user: user.toAuthJSON() });
     } else {
       return res.status(422).json(info);
@@ -85,9 +93,9 @@ function iniciarSesion(req, res, next) {
 }
 
 module.exports = {
-    createUserRescuer,
-    getUserRescuer,
-    modifyUserRescuer,
-    deleteUserRescuer,
-  iniciarSesion
+  createUserRescuer,
+  getUserRescuers,
+  modifyUserRescuer,
+  deleteUserRescuer,
+  startSession
 }

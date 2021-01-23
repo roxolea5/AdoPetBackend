@@ -13,18 +13,18 @@ app.use(bodyParser.json());
 /*********************** Mongoose Configuration *******************************/
 const mongoose = require("mongoose");
 
-/*mongoose.connect(
+mongoose.connect(
   "mongodb+srv://rotz05:rotz050990@cluster0.qgnvy.mongodb.net/AdoPetAPI?retryWrites=true&w=majority"
-);*/
+);
 
 var isProduction = process.env.NODE_ENV === 'production';
 
 console.log(process.env.MONGODB_URI, " ", process.env.NODE_ENV);
 
-mongoose.connect(
+/*mongoose.connect(
   process.env.MONGODB_URI, // obtiene la url de conexión desde las variables de entorno
   { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
-);
+);*/
 
 //mongoose.set("debug", true);
 
@@ -48,12 +48,12 @@ const errorhandler = require('errorhandler')
 require("./models/UserAdmin");
 require("./models/UserRescuer");
 require("./models/UserAdoptant");
-require('./config/passport');
-require('./models/Questionary');
 require('./models/Pet');
 require('./models/Request');
 require('./models/Event');
 require('./models/Directory');
+require('./config/passport');
+
 
 
 // Aquí se importarán los modelos cuando estén listos

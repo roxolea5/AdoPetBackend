@@ -56,7 +56,7 @@ const UserRescuerSchema = new mongoose.Schema({                   //Definiendo e
 // usando plugin de validación para que no se repitan correos ni usernames
 UserRescuerSchema.plugin(uniqueValidator, { message: "Ya existe" });
 
-UserRescuerSchema.methods.crearPassword = function (password) {
+UserRescuerSchema.methods.createPassword = function (password) {
 this.salt = crypto.randomBytes(16).toString("hex"); // generando una "sal" random para cada usuario
 this.hash = crypto
  .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
@@ -66,14 +66,14 @@ this.hash = crypto
 /**
 * Recibe el password, genera y compara el has con el de la base de datos
 */
-UserRescuerSchema.methods.validarPassword = function (password) {
+UserRescuerSchema.methods.validatePassword = function (password) {
 const hash = crypto
  .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
  .toString("hex");
 return this.hash === hash;
 };
 
-UserRescuerSchema.methods.generarJWT = function() {
+UserRescuerSchema.methods.generateJWT = function() {
 const today = new Date();
 const exp = new Date(today);
 exp.setDate(today.getDate() + 60); // 60 días antes de expirar
@@ -92,7 +92,7 @@ UserRescuerSchema.methods.toAuthJSON = function(){
 return {
  username: this.username,
  email: this.email,
- token: this.generarJWT()
+ token: this.generateJWT()
 };
 };
 
