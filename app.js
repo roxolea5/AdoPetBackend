@@ -49,6 +49,7 @@ require("./models/UserAdmin");
 require("./models/UserRescuer");
 require("./models/UserAdoptant");
 require('./models/Pet');
+require('./models/Questionary');
 require('./models/Request');
 require('./models/Event');
 require('./models/Directory');

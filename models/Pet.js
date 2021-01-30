@@ -1,5 +1,4 @@
 // Pet.js
-// UserAdmin.js
 const mongoose = require('mongoose');                         //Importando mongoose.
 
 const PetSchema = new mongoose.Schema({
@@ -37,7 +36,9 @@ PetSchema.methods.publicData = function(){
       vaccines: this.vaccines,
       payment: this.payment,
       status: this.status,
-      posted_by: this.posted_by
+      posted_by: this.posted_by,
+      createdAt: this.createdAt,
+        updatedAt: this.updatedAt
     };
   };
   

@@ -2,18 +2,19 @@
 const mongoose = require('mongoose');                         //Importando mongoose.
 
 const RequestSchema = new mongoose.Schema({
-    required_pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}, 
-    required_by: { type: mongoose.Schema.Types.ObjectId, ref: 'UserAdoptant'}, 
-    followed_by: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRescuer'}, 
-    status: {type: String, enum: ['created', 'pending', 'closed'] ,required: true},
-  }, { timestamps: true });
+    pet_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Pet'}, 
+    user_adoptant_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserAdoptant'}, 
+    user_rescuer_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserRescuer'}, 
+    status: {type: String, enum: ['pending', 'accepted', 'rejected'] ,required: true},
+  }, { collection: "requests", timestamps: true }
+  );
   
   RequestSchema.methods.publicData = function(){
     return {
       id: this.id,
-      required_pet: this.required_pet,
-      required_by: this.required_by,
-      followed_by: this.followed_by,
+      pet_id: this.required_pet,
+      user_adoptant_id: this.required_by,
+      user_rescuer_id: this.followed_by,
       status: this.status
     };
   };

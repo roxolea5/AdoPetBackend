@@ -17,7 +17,7 @@ function getPets(req, res, next) {
           return res.sendStatus(401)
         }
         return res.json(pet.publicData());
-      }).populate('posted_by', 'username first_name Last_name photo').catch(next);
+      }).populate('posted_by', 'username first_name last_name').catch(next);
   } else {
     Pet.find().then(pets=>{
       res.send(pets)
