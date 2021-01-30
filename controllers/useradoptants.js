@@ -24,9 +24,9 @@ function getUserAdoptants(req, res, next) {                              //Obten
       return res.json(user.publicData());
     }).catch(next);
   } else {
-    UserAdoptant.find().then(usuarios=>{
-      usuarios = usuarios.map(u => u.publicData())
-      res.send(usuarios)
+    UserAdoptant.find().then(users=>{
+      users = users.map(u => u.publicData())
+      res.send(users)
     }).catch(next)
   }
 }

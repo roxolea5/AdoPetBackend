@@ -12,10 +12,12 @@ function createPet(req, res, next) {
 
 function getPets(req, res, next) {
   if(req.params.id){
-    Pet.findById(req.params.id)
-			.populate('posted_by', 'username first_name Last_name photo').then(pets => {
-	      res.send(pets)
-	    }).catch(next)
+    Pet.findById(req.params.id, (err, pet) => {
+        if (!pet || err) {
+          return res.sendStatus(401)
+        }
+        return res.json(pet.publicData());
+      }).populate('posted_by', 'username first_name Last_name photo').catch(next);
   } else {
     Pet.find().then(pets=>{
       res.send(pets)
@@ -23,90 +25,64 @@ function getPets(req, res, next) {
   }
 }
 
-function getPet(req, res) {
-  // Simulando dos Mascotas y respondiendolos
-  var pet1 = new Pet(1, 'Nochipa', 'Perro', 'https://www.perrosrazapequeña.com/wp-content/uploads/2018/06/chihuahua-pelo-largo.jpg','bien bonita','1','CDMX');
-  res.send(pet1)
-}
-
-/*function modificarMascota(req, res) {
-  // simulando un mascota previamente existente que el mascota utili
-  var mascota1 = new Mascota(req.params.id, 'Nochipa', 'Perro', 'https://www.perrosrazapequeña.com/wp-content/uploads/2018/06/chihuahua-pelo-largo.jpg','bien bonita','1','CDMX');
-  var modificaciones = req.body
-  mascota1 = { ...mascota1, ...modificaciones }
-  res.send(mascota1)
-}*/
-
 function modifyPet(req, res, next) {
-  console.log("Mascota a modificar: " + req.params.id ) //req.param.id - Mascota en uri
-
-  Pet.findById(req.params.id).then(pet => { //Busca la mascota que se recibe como parámetro.
-
-    if (!pet) { return res.sendStatus(401); }   //Si no se encuentra mascota, retorna estaus 401.---
-
-    let idUsuario=req.usuario.id;                   //User en JWT
-    console.log("Usuario que modifica " + idUsuario);
-    let idAnunciante=pet.posted_by;
-    console.log(" Anunciante mascota: " + idAnunciante);
-    if( idUsuario == idAnunciante ){
-      let nuevaInfo = req.body
-      if (typeof nuevaInfo.name !== 'undefined')
-        mascota.name = nuevaInfo.name
-      if (typeof nuevaInfo.category !== 'undefined')
-        mascota.category = nuevaInfo.category
-      if (typeof nuevaInfo.specie !== 'undefined')
-        mascota.specie = nuevaInfo.specie
-      if (typeof nuevaInfo.sex !== 'undefined')
-        mascota.sex = nuevaInfo.sex
-      if (typeof nuevaInfo.vaccines !== 'undefined')
-        mascota.vaccines = nuevaInfo.vaccines
-      if (typeof nuevaInfo.payment !== 'undefined')
-        mascota.payment = nuevaInfo.payment
-      mascota.save().then(updatedMascota => {
-        res.status(201).json(updatedMascota.publicData())
-      }).catch(next)
-    } 
-    else{
-      return res.sendStatus(401);
-    }
+  Pet.findById(req.params.id).then(pet => { //Find received pet
+    if (!pet) { return res.sendStatus(401); }
+    let newInfo = req.body
+    if (typeof newInfo.name !== 'undefined')
+      pet.name = newInfo.name
+    if (typeof newInfo.photo !== 'undefined')
+      pet.photo = newInfo.photo
+    if (typeof newInfo.category !== 'undefined')
+      pet.category = newInfo.category
+    if (typeof newInfo.specie !== 'undefined')
+      pet.specie = newInfo.specie
+    if (typeof newInfo.sex !== 'undefined')
+      pet.sex = newInfo.sex
+    if (typeof newInfo.age !== 'undefined')
+      pet.age = newInfo.age
+    if (typeof newInfo.size !== 'undefined')
+      pet.size = newInfo.size
+    if (typeof newInfo.description !== 'undefined')
+      pet.description = newInfo.description
+    if (typeof newInfo.iskidfriendly !== 'undefined')
+      pet.iskidfriendly = newInfo.iskidfriendly    
+    if (typeof newInfo.isdogfriendly !== 'undefined')
+      pet.isdogfriendly = newInfo.isdogfriendly
+    if (typeof newInfo.iscatfriendly !== 'undefined')
+      pet.iscatfriendly = newInfo.iscatfriendly
+    if (typeof newInfo.sterilized !== 'undefined')
+      pet.sterilized = newInfo.sterilized
+    if (typeof newInfo.vaccines !== 'undefined')
+      pet.vaccines = newInfo.vaccines
+    if (typeof newInfo.payment !== 'undefined')
+      pet.payment = newInfo.payment
+    if (typeof newInfo.status !== 'undefined')
+      pet.status = newInfo.status
+    pet.save().then(updatedPet => {                                   //Guardando usuario modificado en MongoDB.
+      res.status(201).json(updatedPet.publicData())
+    }).catch(next)
   }).catch(next)
 }
 
-/*function eliminarMascota(req, res) {
-    // Líneas que buscan un usaurio en la bd, una vez que lo encuenra lo elimina.
-  res.status(200).send(`Mascota ${req.params.id} eliminado`);
-}*/
-
 function deletePet(req, res) {
-  // únicamente borra a su propio mascota obteniendo el id del token
+
   Pet.findById(req.params.id).then(pet => {
 
     if (!pet) { return res.sendStatus(401); }
     
-    let idUsuario=req.usuario.id;
-    console.log("Usuario que modifica " + idUsuario);
-    let idAnunciante=pet.posted_by;
-    console.log(" Anunciante mascota: " + idAnunciante);
-
-    if( idUsuario == idAnunciante ){
-      let namePet = pet.name;
-      pet.deleteOne();
-      res.status(200).send(`Mascota ${req.params.id} eliminada. ${namePet}`);
-    }else{
-      return res.sendStatus(401);
-    }
+    let petName = pet.name;
+    pet.deleteOne();
+    res.status(200).send(`Mascota ${req.params.id} eliminada. ${petName}`);
+    
+    
   });
   
-  /*Mascota.findOneAndDelete({ _id: req.param.id }).then(r => {
-      res.status(200).send(`Mascota ${req.params.id} eliminada: ${r}`);
-  });*/
 }
-
 
 module.exports = {
   createPet,
-  /*getPets,
+  getPets,
   modifyPet,
-  deletePet,
-  getPet*/
+  deletePet
 }
