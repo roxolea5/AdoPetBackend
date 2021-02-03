@@ -6,15 +6,15 @@ const RequestSchema = new mongoose.Schema({
     user_adoptant_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserAdoptant'}, 
     user_rescuer_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserRescuer'}, 
     status: {type: String, enum: ['pending', 'accepted', 'rejected'] ,required: true},
-  }, { collection: "requests", timestamps: true }
+  }, {timestamps: true }
   );
   
   RequestSchema.methods.publicData = function(){
     return {
       id: this.id,
-      pet_id: this.required_pet,
-      user_adoptant_id: this.required_by,
-      user_rescuer_id: this.followed_by,
+      pet_id: this.pet_id,
+      user_adoptant_id: this.user_adoptant_id,
+      user_rescuer_id: this.user_rescuer_id,
       status: this.status
     };
   };

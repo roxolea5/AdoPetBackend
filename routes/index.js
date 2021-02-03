@@ -10,8 +10,8 @@ router.use('/userAdoptants', require('./userAdoptants'));
 router.use('/pets', require('./pets'));
 router.use('/questionaries', require('./questionaries'));
 router.use('/requests', require('./requests'));
-/*router.use('/events', require('./events'));
-router.use('/directories', require('./directories'));*/
+router.use('/events', require('./events'));
+/*router.use('/directories', require('./directories'));*/
 
 
 module.exports = router;
