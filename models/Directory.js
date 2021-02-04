@@ -1,11 +1,6 @@
 // Directory.js
 // UserAdmin.js
 const mongoose = require('mongoose');                         //Importando mongoose.
-const uniqueValidator = require("mongoose-unique-validator"); //Importando módulo mongoose-unique-validator, pendiente de instalar.
-const crypto = require('crypto');                             //Importando módulo crypto, pendiente de instalar.
-const jwt = require('jsonwebtoken');                          //Importando módulo jsonwebtoken, pendiente de instalar.
-const secret = require('../config').secret;  
-
 
 const DirectorySchema = new mongoose.Schema({
   photo: {type: String, required: true}, // 
@@ -15,8 +10,8 @@ const DirectorySchema = new mongoose.Schema({
   phone: { type: String,required: true},
   days: { type: String, required: true}, 
   hour: {type: String, required: true}, 
-  published_by: { type: mongoose.Schema.Types.ObjectId, ref: 'UserAdmin'}, 
-  orpublished_by: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRescuer'}, 
+  published_by_1: { type: mongoose.Schema.Types.ObjectId, ref: 'UserAdmin'}, 
+  published_by_2: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRescuer'}, 
 }, { timestamps: true }
 
 );
@@ -24,14 +19,17 @@ const DirectorySchema = new mongoose.Schema({
 DirectorySchema.methods.publicData = function(){
   return {
     id: this.id,
+    photo: this.photo,
     type: this.type,
     representative: this.representative,
     address: this.address,
     phone: this.phone,
     days: this.days,
     hour: this.hour,
-    published_by: this.published_by,
-    orpublished_by: this.orpublished_by
+    published_by_1: this.published_by,
+    published_by_2: this.orpublished_by,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
   };
 };
 

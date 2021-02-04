@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Event = mongoose.model('Event')
-const Pet = mongoose.model('Pet')
 mongoose.set('useFindAndModify', false);
 
 function createEvent(req, res, next) { 
