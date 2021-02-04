@@ -26,8 +26,8 @@ DirectorySchema.methods.publicData = function(){
     phone: this.phone,
     days: this.days,
     hour: this.hour,
-    published_by_1: this.published_by,
-    published_by_2: this.orpublished_by,
+    published_by_1: this.published_by_1,
+    published_by_2: this.published_by_2,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };
